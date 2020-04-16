@@ -23,6 +23,7 @@ The script train_valid_splitter.py splits the labelled data into training and va
 ### Model in Tensorflow
 The script train.py defines and trains the deep neural network for image classification. The model uses 2D convolution layer followed by max_pooling layer, hidden fully connected neural network layer and output layer with softmax activation.
 
+```python
 Model: "sequential"
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
@@ -41,6 +42,7 @@ Total params: 1,387,658
 Trainable params: 1,387,658
 Non-trainable params: 0
 _________________________________________________________________
+```
 
 The model accuracy on a validation set is around 98 %. This is very good result given the relatively poor quality of images and largely varying light conditions. On the other hand, the first 4 digits of the display did not change over the time of data acquisition, therefore the model performs great on the first 4 positions and on recognizing digits, which were displayed on these, but performs worse on the last positions.
 (TODO: Confusion matrix!)
