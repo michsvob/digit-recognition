@@ -44,7 +44,16 @@ Non-trainable params: 0
 _________________________________________________________________
 ```
 
-The model accuracy on a validation set is around 98 %. This is very good result given the relatively poor quality of images and largely varying light conditions. On the other hand, the first 4 digits of the display did not change over the time of data acquisition, therefore the model performs great on the first 4 positions and on recognizing digits, which were displayed on these, but performs worse on the last positions.
+The model accuracy on a validation set is around 99 % and with the used optimizer parameters the model converges to optimal parameters very quickly. This is very good result given the relatively poor quality of images and largely varying light conditions. ![alt text][learning_curves]
+
+On the other hand, the first 4 digits of the display did not change over the time of data acquisition, therefore the model performs great on the first 4 positions and on recognizing digits, which were displayed on these, but performs worse on the last positions.
 (TODO: Confusion matrix!)
 
+## Feedback
+If you find this project interesting, please let me know about that! Also if you have some questions to how this has been done or you want to do it yourself, don't hesitate to ask.
+
+TODO: deployment
+TODO: web dashboard
+
 [camera_setup]: setup.jpg "Mechanical setup"
+[learning_curves]: learning_curves.png "Learning curves"

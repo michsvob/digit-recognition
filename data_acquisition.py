@@ -14,7 +14,7 @@ from fractions import Fraction
 
 import secret
 
-client = pymongo.MongoClient(connstring) #connstring is a variable comming from secret.py containing mongo db connection string
+client = pymongo.MongoClient(secret.connstring) #connstring is a variable comming from secret.py containing mongo db connection string
 db=client.test
 
 

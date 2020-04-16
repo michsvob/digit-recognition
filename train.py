@@ -7,7 +7,7 @@ import ssl
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import secret
 
-client = pymongo.MongoClient(connstring) #connstring is a variable comming from secret.py containing mongo db connection string
+client = pymongo.MongoClient(secret.connstring) #connstring is a variable comming from secret.py containing mongo db connection string
 db=client.test
 print("loading data")
 cursor=db.gas_digit.find({
@@ -82,12 +82,26 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 
 stopper=Stopper() #create callback object
 print(model.summary())
-model.fit(x=train_images,y=train_labels,epochs=10)#for some reason does not work: ,callbacks=[stopper])
+history=model.fit(x=train_images,y=train_labels,epochs=20,validation_data=(validation_images,validation_labels))#for some reason does not work: ,callbacks=[stopper])
 
-test_loss, test_acc = model.evaluate(validation_images,  validation_labels, verbose=1)
-
-print('\nTest accuracy:', test_acc," Loss:",test_loss)
-
-predictions = model.predict(validation_images)
+validation_loss, validation_acc = model.evaluate(validation_images,  validation_labels, verbose=1)
 
 model.save(model_save_path)
+
+#plot training progress
+import matplotlib.pyplot as plt
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = range(len(acc))
+
+plt.plot(epochs, acc, 'r', label='Training accuracy')
+plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
+plt.title('Training and validation accuracy')
+plt.legend(loc=0)
+plt.figure()
+
+
+plt.show()
