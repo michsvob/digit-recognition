@@ -66,7 +66,12 @@ _________________________________________________________________
 ```
 Data has been pre-processed by centering pixel values for each sample around 0 and divided by their standard deviations. Also data augmentation has been used to account for horizontal and especially vertical variation in the position of the digits.
 
-The model accuracy on a validation set is around 98 % and with the used optimizer parameters the model converges to optimal parameters very quickly. This is very good result given the relatively poor quality of images and largely varying light conditions. ![alt text][learning_curves]
+The model accuracy on a validation set is around 98 % and with the used optimizer parameters the model converges to optimal parameters very quickly. This is very good result given the relatively poor quality of images and largely varying light conditions.
+
+Learning curves:
+
+![alt text][learning_curves]
+![alt text][learning_curves_loss]
 
 On the other hand, the first 4 digits of the display did not change over the time of data acquisition, therefore the model performs great on the first 4 positions and on recognizing digits, which were displayed on these, but performs worse on the last positions.
 
@@ -104,7 +109,7 @@ TODO: deployment
 TODO: web dashboard
 
 [camera_setup]: setup.jpg "Mechanical setup"
-[learning_curves]: learning_curves.png "Learning curves"
+[learning_curves]: learning_curves.png "Learning curves - accuracy"
 [learning_curves_loss]: learning_curves_loss.png "Learning curves - loss"
 [digit1]: digit1.png "Digit1"
 [digit2]: digit2.png "Digit2"
