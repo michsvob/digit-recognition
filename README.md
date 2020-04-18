@@ -13,12 +13,15 @@ This is done using the data_acquisition.py script running on Raspberry Pi 3. The
 
 #### Training data
 Image captured by Raspberry camera looks like this:
+
 ![alt text][display_whole]
 
 Extracted display portion:
+
 ![alt text][display_extracted]
 
 Extracted digits look like this:
+
 ![alt text][digit1]
 ![alt text][digit2]
 ![alt text][digit3]
@@ -92,7 +95,7 @@ pos.4 [ nan  nan  nan  nan  nan  nan  nan  nan 0.    nan]
 pos.5 [ nan  nan  nan  nan  nan  nan 0.01 0.   0.    nan]
 pos.6 [0.   0.   0.   0.   0.   0.   0.   0.   0.   0.05]
 pos.7 [0.05 0.   0.   0.   0.07 0.02 0.01 0.   0.02 0.01]
-pos.8 [0.12 0.04 0.18 0.12 0.   0.   0.25 0.   0.05 0.  ]]
+pos.8 [0.12 0.04 0.18 0.12 0.   0.   0.25 0.   0.05 0.  ]
 ```
 ## Feedback
 If you find this project interesting, please let me know about that! Also if you have some questions to how this has been done or you want to do it yourself, don't hesitate to ask.
@@ -111,5 +114,5 @@ TODO: web dashboard
 [digit6]: digit6.png "Digit6"
 [digit7]: digit7.png "Digit7"
 [digit8]: digit8.png "Digit8"
-[display_whole]: tempcam.jpg "Display (whole)"
+[display_whole]: temp_cam.jpg "Display (whole)"
 [display_extracted]: croppedtest.jpg "Display (extracted portion)"
