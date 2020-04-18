@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import secret
 
-client = pymongo.MongoClient(connstring) #connstring is a variable comming from secret.py containing mongo db connection string
+client = pymongo.MongoClient(secret.connstring) #connstring is a variable comming from secret.py containing mongo db connection string
 db=client.test
 
 
@@ -16,14 +16,14 @@ cursor=db.gas_digit.find({
     'digit_position': {
         #'$not': {
             '$in': [
-                5 #set label position!!!!!
+                0,1,2,3,4,5,6,7 #set label position!!!!!
             ]
         #}
     },
     'label': {
         '$not': {
             '$in': [
-                12#1,2,3,4,5,6,7,8,9,0
+                1,2,3,4,5,6,7,8,9,0
             ]
         }
     }
@@ -38,7 +38,7 @@ for document in cursor:
     pic=(pic-pic.min())/(pic.max()-pic.min())#normalize
     pic=pic/pic.max() #scale to 0-1
 
-    if document['date']>datetime.strptime("2020-04-14 11:00","%Y-%m-%d %H:%M"):
+    if document['date']>datetime.strptime("2020-04-16 21:00","%Y-%m-%d %H:%M") and document['date']<datetime.strptime("2020-04-17 11:00","%Y-%m-%d %H:%M"):
         print(document['date'])
         # display image
         plt.figure()
@@ -49,5 +49,6 @@ for document in cursor:
         plt.show()
         plt.pause(0.05)
         plt.close()
-        label=11# Set label!!!!!!!
-        db.gas_digit.update_one({"_id":id},{"$set":{"label":label}})
+        label=1# Set label!!!!!!!
+        db.gas_digit.delete_one({"_id":id})
+        #db.gas_digit.update_one({"_id":id},{"$set":{"label":label}})

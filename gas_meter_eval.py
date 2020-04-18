@@ -5,6 +5,7 @@ from PIL import Image
 import pymongo
 import ssl
 import secret
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 client = pymongo.MongoClient(secret.connstring) #connstring is a variable comming from secret.py containing mongo db connection string
 db=client.test
@@ -12,8 +13,13 @@ db=client.test
 print(tf.__version__)
 print(np.__version__)
 
-model = tf.keras.models.load_model('model/digit_model3')
+model = tf.keras.models.load_model('model/digit_model4')
 
+#preprocessing functions applied on picture to be predicted
+datagen=ImageDataGenerator(
+    samplewise_center=True,
+    samplewise_std_normalization=True,
+)
 
 print("loading data")
 cursor=db.gas_digit.find({
@@ -24,14 +30,14 @@ cursor=db.gas_digit.find({
     },
     'dataset':{
             '$in': [
-                'validation'
+                'validation','training'
             ]
     }
 },{"image":1,"date":1,"label":1,'digit_position':1,'dataset':1})
 
 
 def predict_class(im):
-    prediction = model.predict(im)
+    prediction = model.predict(datagen.flow(im))
     return int(prediction.argmax())#convert numpy int64 to python int in order to be able to write to database later on
 
 def showimage(image):
@@ -39,14 +45,14 @@ def showimage(image):
     image=(image-image.min())/(image.max()-image.min())#normalize
     image=image/image.max() #scale to 0-1
 
-    plt.figure()
-    plt.imshow(image[0])
-    plt.colorbar()
-    plt.grid(False)
-    plt.ion()
-    plt.show()
-    plt.pause(0.1)
-    plt.close()
+    #plt.figure()
+    #plt.imshow(image[0])
+    #plt.colorbar()
+    #plt.grid(False)
+    #plt.ion()
+    #plt.show()
+    #plt.pause(0.1)
+    #plt.close()
 
 for document in cursor:
     id=document['_id']

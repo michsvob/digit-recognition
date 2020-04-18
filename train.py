@@ -55,11 +55,16 @@ validation_labels=np.array(validation_labels)
 train_labels=np.array(train_labels)
 
 #preprocess data
-train_images=(train_images-train_images.min())/(train_images.max()-train_images.min())#normalize
-train_images=train_images/train_images.max() #scale to 0-1
-validation_images=(validation_images-validation_images.min())/(validation_images.max()-validation_images.min())#normalize
-validation_images=validation_images/validation_images.max() #scale to 0-1
-
+train_datagen=ImageDataGenerator(
+    samplewise_center=True,
+    samplewise_std_normalization=True,
+    width_shift_range=0.1,
+    height_shift_range=0.2
+)
+validation_datagen=ImageDataGenerator(
+    samplewise_center=True,
+    samplewise_std_normalization=True,
+)
 
 model = tf.keras.Sequential([
     tf.keras.layers.Convolution2D(64,(3,3),input_shape=(28,28,3)),
@@ -69,12 +74,11 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(10,activation='softmax')
 ])
 
-model_save_path="model/digit_model3"
+model_save_path="model/digit_model4"
 
 class Stopper(tf.keras.callbacks.Callback):
         def on_epoch_end(self,epoch,logs):
-            print(logs)
-            if logs.get('acc')>=0.998:
+            if logs.get('accuracy')>=0.998:
                 print("model good enough, stopping training...")
                 self.model.stop_training=True
 
@@ -82,9 +86,15 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 
 stopper=Stopper() #create callback object
 print(model.summary())
-history=model.fit(x=train_images,y=train_labels,epochs=20,validation_data=(validation_images,validation_labels))#for some reason does not work: ,callbacks=[stopper])
-
-validation_loss, validation_acc = model.evaluate(validation_images,  validation_labels, verbose=1)
+history=model.fit(train_datagen.flow(x=train_images,
+                                     y=train_labels,
+                                     batch_size=32),
+                    steps_per_epoch=len(train_images)/32,
+                    epochs=40,
+                    validation_data=validation_datagen.flow(x=validation_images,
+                                                       y=validation_labels,
+                                                       batch_size=16),
+                    callbacks=[stopper])
 
 model.save(model_save_path)
 
@@ -101,7 +111,10 @@ plt.plot(epochs, acc, 'r', label='Training accuracy')
 plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
 plt.title('Training and validation accuracy')
 plt.legend(loc=0)
-plt.figure()
 
-
+plt.show()
+plt.plot(epochs, loss, 'r', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Validation loss')
+plt.title('Training and validation loss')
+plt.legend(loc=0)
 plt.show()

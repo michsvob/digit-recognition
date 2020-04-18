@@ -46,7 +46,6 @@ for document in cursor:
     plt.ion()
     plt.show()
     plt.pause(0.5)
-    #time.sleep(5)
     plt.close()
 
     # read label
