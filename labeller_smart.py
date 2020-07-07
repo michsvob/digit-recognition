@@ -8,16 +8,19 @@ import secret
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-client = pymongo.MongoClient(secret.connstring) #connstring is a variable comming from secret.py containing mongo db connection string
+client = pymongo.MongoClient(secret.connstring,
+                             ssl=True,
+                             ssl_cert_reqs=ssl.CERT_NONE) #connstring is a variable comming from secret.py containing mongo db connection string
 db=client.test
 
-model = tf.keras.models.load_model('model/digit_model4')
+model = tf.keras.models.load_model('model/digit_model6.h5')
 
 #preprocessing functions applied on picture to be predicted
 datagen=ImageDataGenerator(
     samplewise_center=True,
     samplewise_std_normalization=True,
 )
+
 
 def predict_class(im):
     prediction = model.predict(datagen.flow(im))
@@ -51,16 +54,18 @@ for document in cursor:
     pic=(pic-pic.min())/(pic.max()-pic.min())#normalize
     pic=pic/pic.max() #scale to 0-1
 
+    prediction=int(predict_class(np.array(document["image"]).reshape(1,28,28,3)))
     # display image
     plt.figure()
     plt.imshow(pic)
+    plt.text(14,14,prediction,fontsize=20)
     plt.colorbar()
     plt.grid(False)
     plt.ion()
     plt.show()
-    plt.pause(0.5)
+    plt.pause(.7)
     plt.close()
-    prediction=int(predict_class(np.array(document["image"]).reshape(1,28,28,3)))
+
 
     # read label
     print("Is this number ",prediction,"? Enter, otherwise write number: ")

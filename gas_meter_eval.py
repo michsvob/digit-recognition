@@ -7,13 +7,16 @@ import ssl
 import secret
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-client = pymongo.MongoClient(secret.connstring) #connstring is a variable comming from secret.py containing mongo db connection string
+client = pymongo.MongoClient(secret.connstring,
+                             ssl=True,
+                             ssl_cert_reqs=ssl.CERT_NONE) #connstring is a variable comming from secret.py containing mongo db connection string
+ #connstring is a variable comming from secret.py containing mongo db connection string
 db=client.test
 
 print(tf.__version__)
 print(np.__version__)
 
-model = tf.keras.models.load_model('model/digit_model4')
+model = tf.keras.models.load_model('model/digit_model6')
 
 #preprocessing functions applied on picture to be predicted
 datagen=ImageDataGenerator(

@@ -7,7 +7,11 @@ import ssl
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import secret
 
-client = pymongo.MongoClient(secret.connstring) #connstring is a variable comming from secret.py containing mongo db connection string
+client = pymongo.MongoClient(secret.connstring,
+                             ssl=True,
+                            ssl_cert_reqs=ssl.CERT_NONE)
+#connstring is a variable comming from secret.py containing mongo db connection string
+
 db=client.test
 print("loading data")
 cursor=db.gas_digit.find({
@@ -74,7 +78,7 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(10,activation='softmax')
 ])
 
-model_save_path="model/digit_model4"
+model_save_path="model/digit_model6"
 
 class Stopper(tf.keras.callbacks.Callback):
         def on_epoch_end(self,epoch,logs):
@@ -90,13 +94,14 @@ history=model.fit(train_datagen.flow(x=train_images,
                                      y=train_labels,
                                      batch_size=32),
                     steps_per_epoch=len(train_images)/32,
-                    epochs=40,
+                    epochs=25,
                     validation_data=validation_datagen.flow(x=validation_images,
                                                        y=validation_labels,
                                                        batch_size=16),
                     callbacks=[stopper])
 
 model.save(model_save_path)
+model.save(model_save_path+".h5")
 
 #plot training progress
 import matplotlib.pyplot as plt
